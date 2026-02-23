@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'shopping-list', pathMatch: 'full' },
   {
-    path: 'dashboard',
+    path: 'shopping-list',
     loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent,
+      import('./features/shopping-list/shopping-list.component').then(
+        (m) => m.ShoppingListComponent,
       ),
   },
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: 'shopping-list' },
 ];
