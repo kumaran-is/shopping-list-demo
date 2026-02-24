@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ShoppingListStateService, FilterType } from './shopping-list-state.service';
+import { ShoppingListStateService, FilterType, Priority } from './shopping-list-state.service';
 
 @Component({
   selector: 'app-shopping-list',
@@ -41,6 +41,16 @@ import { ShoppingListStateService, FilterType } from './shopping-list-state.serv
                 min="1"
                 aria-label="Quantity"
               />
+              <select
+                class="select w-28"
+                [(ngModel)]="newPriority"
+                name="newPriority"
+                aria-label="Priority"
+              >
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
               <button
                 type="submit"
                 class="btn btn-primary"
@@ -100,6 +110,14 @@ import { ShoppingListStateService, FilterType } from './shopping-list-state.serv
                     {{ item.name }}
                   </span>
                   <span class="text-xs text-base-content/50">qty: {{ item.quantity }}</span>
+                  <span
+                    class="badge badge-sm"
+                    [class.badge-error]="item.priority === 'high'"
+                    [class.badge-warning]="item.priority === 'medium'"
+                    [class.badge-success]="item.priority === 'low'"
+                  >
+                    {{ item.priority }}
+                  </span>
                 </div>
 
                 <!-- Delete -->
@@ -136,6 +154,7 @@ export class ShoppingListComponent {
 
   newName = '';
   newQuantity = 1;
+  newPriority: Priority = 'medium';
 
   protected readonly filterTabs: { label: string; value: FilterType }[] = [
     { label: 'All', value: 'all' },
@@ -144,8 +163,9 @@ export class ShoppingListComponent {
   ];
 
   onAdd(): void {
-    this.state.addItem(this.newName, this.newQuantity);
+    this.state.addItem(this.newName, this.newQuantity, this.newPriority);
     this.newName = '';
     this.newQuantity = 1;
+    this.newPriority = 'medium';
   }
 }
