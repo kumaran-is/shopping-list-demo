@@ -9,6 +9,7 @@ describe('ShoppingListComponent', () => {
   let state: ShoppingListStateService;
 
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [ShoppingListComponent],
       providers: [provideZonelessChangeDetection()],
@@ -35,6 +36,18 @@ describe('ShoppingListComponent', () => {
     state.addItem('Eggs', 12);
     expect(state.totalCount()).toBe(before + 1);
     expect(state.filteredItems().at(-1)?.name).toBe('Eggs');
+  });
+
+  it('should add an item with priority', () => {
+    state.addItem('Urgent Item', 1, 'high');
+    const added = state.filteredItems().at(-1)!;
+    expect(added.priority).toBe('high');
+  });
+
+  it('should default priority to medium', () => {
+    state.addItem('Normal Item', 1);
+    const added = state.filteredItems().at(-1)!;
+    expect(added.priority).toBe('medium');
   });
 
   it('should not add an item with blank name', () => {
